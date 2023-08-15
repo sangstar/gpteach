@@ -3,3 +3,4 @@ gpteach_venv
 .DS_Store
 __pycache__
 secret.py
+to_add.ipynb

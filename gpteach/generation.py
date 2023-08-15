@@ -23,6 +23,18 @@ pricing = {
     }
 }
 
+def generate_prompt(section):
+    prompt = f"""
+You are a helpful assistant that takes sections of text from a Wikipedia article and creates questions and answers based on the article.
+
+#Article Section#:
+{section}
+
+#Generated Questions and Answers#:
+
+"""
+    return prompt
+
 def get_completion_cost(text, model_id, type):
     enc = tiktoken.get_encoding("cl100k_base")
     enc = tiktoken.encoding_for_model(model_id)
@@ -41,6 +53,7 @@ class QAGenerator:
         self.api_key = api_key
         self.model_id = model_id
         self.cost = 0
+        openai.api_key = self.api_key
 
     def get_completion(self, prompt, **kwargs):
         model_id = self.model_id
@@ -50,7 +63,7 @@ class QAGenerator:
 
         response = openai.ChatCompletion.create(
         model=self.model_id,
-        messages=prompt,
+        messages=messages,
         **kwargs
         )
 
@@ -61,3 +74,14 @@ class QAGenerator:
         self.cost += completion_cost
 
         return resp
+
+    def qas_from_sections(self, sections):
+        qas = []
+        for section in sections:
+            prompt = generate_prompt(section)
+            response = self.get_completion(prompt)
+            qas.append(response)
+        return qas
+
+
+    
