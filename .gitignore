@@ -1,0 +1,5 @@
+gpteach
+.ipynb_checkpoints
+.DS_Store
+__pycache__
+secret.py
