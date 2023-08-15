@@ -5,7 +5,7 @@ A project I'm working on that will aim to create Q&A's for a topic of your choic
 ## Quickstart
 An example implementation is below. 
 
-You can start by loading the `ChunkGenerator` object, which gets wikipedia article text and splices it into sections.
+You can start by loading the `ChunkGenerator` object, which gets Wikipedia article text and splices it into sections.
 
 ```
 from gpteach.data_preparation import ChunkGenerator
