@@ -24,10 +24,8 @@ class ChunkGenerator:
         use_separator = self.use_separator
         use_chunks = self.use_chunks
 
-        # Define the Wikipedia API endpoint
         wiki_api_url = "https://en.wikipedia.org/w/api.php"
 
-        # Define parameters for the search API request
         search_params = {
             "format": "json",
             "action": "query",
@@ -35,7 +33,6 @@ class ChunkGenerator:
             "srsearch": f"{search_prompt}",
         }
 
-        # Make the search API request
         search_response = requests.get(wiki_api_url, params=search_params)
         search_data = search_response.json()
 

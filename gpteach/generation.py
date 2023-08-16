@@ -1,5 +1,6 @@
 import openai
 import tiktoken
+import numpy as np
 
 pricing = {
     "gpt-4":{
@@ -26,6 +27,8 @@ pricing = {
 def generate_prompt(section):
     prompt = f"""
 You are a helpful assistant that takes sections of text from a Wikipedia article and creates questions and answers based on the article.
+Create question and answers in a format where the question is labeled "Q:" and the answer is labeled "A:"
+Separate each question and answer pair with a \n\n
 
 #Article Section#:
 {section}
@@ -48,12 +51,15 @@ def get_completion_cost(text, model_id, type):
 class QAGenerator:
     def __init__(self,
                  api_key,
-                 model_id
+                 model_id,
+                 prompt_generator = generate_prompt
                  ):
         self.api_key = api_key
         self.model_id = model_id
         self.cost = 0
         openai.api_key = self.api_key
+        self.prompt_generator = prompt_generator
+        self.cost_history = []
 
     def get_completion(self, prompt, **kwargs):
         model_id = self.model_id
@@ -72,16 +78,36 @@ class QAGenerator:
 
         completion_cost = prompt_cost + resp_cost
         self.cost += completion_cost
+        self.cost_history.append(completion_cost)
 
         return resp
 
+    def cost_from_sections(self, sections):
+        cost = 0
+        prompt_generator = self.prompt_generator
+        model_id = self.model_id
+        for section in sections:
+            prompt = prompt_generator(section)
+            cost += get_completion_cost(prompt, model_id, type = 'prompt')
+        return cost 
+        
+
     def qas_from_sections(self, sections):
         qas = []
+        prompt_generator = self.prompt_generator
         for section in sections:
-            prompt = generate_prompt(section)
+            prompt = prompt_generator(section)
             response = self.get_completion(prompt)
             qas.append(response)
         return qas
+
+    def estimate_cost(self, sections, num_to_test = 5):
+        qas = self.qas_from_sections(sections[:num_to_test])
+        qa_costs = self.cost_history[-num_to_test:]
+        nominal = np.mean(qa_costs)
+        uncertainty = np.std(qa_costs)/np.sqrt(num_to_test)
+        print(f'{nominal} +- {uncertainty}')
+        return nominal, uncertainty
 
 
     
