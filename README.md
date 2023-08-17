@@ -34,7 +34,7 @@ QA = QAGenerator(api_key = api_key, model_id = 'gpt-3.5-turbo')
 QAs = QA.qas_from_sections(sections)
 ```
 
-If you want to get an idea of how much the QAs will cost you, you can get an estimation of it using a few prompts, by taking the mean and standard error of the costs of those QAs. Obviously, the more you test, the lower the uncertainty. 
+If you want to get an idea of how much the QAs will cost you, you can get an estimation of it using a few prompts, Obviously, the more you test, the lower the uncertainty. 
 
 ```
 QA.estimate_cost(sections, num_to_test = 10)
