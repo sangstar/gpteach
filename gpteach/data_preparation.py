@@ -67,6 +67,8 @@ class ChunkGenerator:
         else:
             print("Search API request failed.")
         if use_separator == True:
+            use_chunks = False
             return get_data_by_separator(cleaned_text, separator = self.separator, min_characters = 50)
         if use_chunks == True:
+            use_separator = False
             return get_data_by_chunks(cleaned_text, num_chunks = self.num_chunks)

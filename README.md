@@ -15,6 +15,13 @@ from secret import api_key # Wherever you get your API key from
 chunk_generator = ChunkGenerator()
 sections = chunk_generator.get_data_from_wikipedia('George Washington')
 ```
+If you want larger or smaller sections from which to generate QAs, you can change the `num_chunks` in `QAGenerator`, which is the number of slices used to create prompts. By default it is 25. 
+
+If you want to instead separate slices by a separator rather than into even chunks, you can specify that you want to use a separator and state which separator you want to use. By default, the Wikipedia separator is `'[edit]'`, but you can set it to whatever you want. 
+
+```
+chunk_generator_using_separator = ChunkGenerator(use_separator = True, separator = 'foo')
+```
 
 From there, you can generate QAs with the `QAGenerator`. 
 
