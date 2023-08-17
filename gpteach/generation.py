@@ -1,6 +1,7 @@
 import openai
 import tiktoken
 import numpy as np
+from uncertainties import ufloat
 
 pricing = {
     "gpt-4":{
@@ -95,7 +96,6 @@ class QAGenerator:
     def qas_from_sections(self, sections):
         qas = []
         prompt_generator = self.prompt_generator
-        print(f'prompt generator: {prompt_generator}')
         for section in sections:
             prompt = prompt_generator(section)
             response = self.get_completion(prompt)
@@ -107,8 +107,9 @@ class QAGenerator:
         qa_costs = self.cost_history[-num_to_test:]
         nominal = np.mean(qa_costs)
         uncertainty = np.std(qa_costs)/np.sqrt(num_to_test)
-        print(f'{nominal} +- {uncertainty}')
-        return nominal, uncertainty
+
+        extrapolated_cost_estimation = ufloat(nominal, uncertainty) * num_to_test
+        return extrapolated_cost_estimation
 
 
     

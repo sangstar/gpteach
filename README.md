@@ -34,16 +34,18 @@ QA = QAGenerator(api_key = api_key, model_id = 'gpt-3.5-turbo')
 QAs = QA.qas_from_sections(sections)
 ```
 
-If you want to get an idea of how much the QAs will cost you, you can get an estimation of it using a few prompts, Obviously, the more you test, the lower the uncertainty. 
+If you want to get an idea of how much the QAs will cost you, you can get an estimation of it using a few prompts. It returns a `uncertainties.core.AffineScalarFunc` object. Obviously, the more you test, the lower the uncertainty.
 
 ```
 QA.estimate_cost(sections, num_to_test = 10)
+>>> 0.027009000000000005+/-0.00037327041136420115
 ```
 
 You can also use a custom prompt if you want using `prompt_generator` method of `QAGenerator`.
 
 ```
-QA.prompt_generator = lambda x: f"""Write a QA based on the following text: {x}"""
-QA.qas_from_sections(sections[:2])
+QA.prompt_generator = lambda x: f"""Write a Q&A based on the following text, but provide two possible answers: {x}"""
+QA.qas_from_sections(sections[:1])
+>>> ['Q: Who was George Washington?\n1. Founding Father\n2. 1st President of the United States']
 ```
 
