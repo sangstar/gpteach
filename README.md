@@ -41,7 +41,7 @@ QA.estimate_cost(sections, num_to_test = 10)
 >>> 0.027009000000000005+/-0.00037327041136420115
 ```
 
-You can also use a custom prompt if you want using `prompt_generator` method of `QAGenerator`.
+You can also use a custom prompt if you want, using the `prompt_generator` method of `QAGenerator`.
 
 ```
 QA.prompt_generator = lambda x: f"""Write a Q&A based on the following text, but provide two possible answers: {x}"""
