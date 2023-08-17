@@ -95,6 +95,7 @@ class QAGenerator:
     def qas_from_sections(self, sections):
         qas = []
         prompt_generator = self.prompt_generator
+        print(f'prompt generator: {prompt_generator}')
         for section in sections:
             prompt = prompt_generator(section)
             response = self.get_completion(prompt)
